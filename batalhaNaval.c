@@ -1,14 +1,65 @@
 #include <stdio.h>
+#include <stdbool.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+void exibirTabuleiro(int tabuleiro[10][10]){
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++){
+            // percorre a matriz e exibe o valor de cada posição
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void adicionarNavio(int tabuleiro[10][10], int posX, int posY, int orientacao){
+    int codigoNavio = 3; // 3 representa o navio no tabuleiro
+    int tamanho = 3; // Tamanho do navio
+    if (orientacao == 0) // orientacao do navio e horizontal
+    { 
+        for (int i = 0; i < tamanho; i++){
+            tabuleiro[posX][posY + i] = codigoNavio;
+        }
+    } 
+    else // orientacao do navio e vertical
+    { 
+        for (int i = 0; i < tamanho; i++){
+            tabuleiro[posX + i][posY] = codigoNavio;
+        }
+    }
+}
+
+bool verificarPosicaoValida(int tabuleiro[10][10], int posX, int posY, int orientacao){
+    int tamanho = 3; // Tamanho do navio
+    if (orientacao == 0) // orientacao do navio horizontal
+    { 
+        for (int i = 0; i < tamanho; i++){
+            if (tabuleiro[posX][posY + i] != 0){
+                return false;
+            }
+        }
+    } 
+    else // orientacao do navio vertical
+    { 
+        for (int i = 0; i < tamanho; i++){
+            if (tabuleiro[posX + i][posY] != 0){
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+
+    int tabuleiro[10][10] = {0};
+
+    bool posicaoValidaNavio1 = verificarPosicaoValida(tabuleiro, 0, 0, 0); // verficar se a posicao e valida e salva o resultado na variavel
+    posicaoValidaNavio1 ? adicionarNavio(tabuleiro, 0, 0, 0) : printf("Posicao invalida\n"); // se a posicao for valida adiciona o navio no tabuleiro
+    
+    bool posicaoValidaNavio2 = verificarPosicaoValida(tabuleiro, 2, 5, 1); // verficar se a posicao e valida e salva o resultado na variavel
+    posicaoValidaNavio2 ? adicionarNavio(tabuleiro, 2, 5, 1) : printf("Posicao invalida\n"); // se a posicao for valida adiciona o navio no tabuleiro
+
+    exibirTabuleiro(tabuleiro); // exibe o tabuleiro
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
