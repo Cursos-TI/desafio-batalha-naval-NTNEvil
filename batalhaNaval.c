@@ -4,10 +4,11 @@
 #define TAMANHO_TABULEIRO 10
 #define TAMANHO_NAVIO 3
 #define CODIGO_NAVIO 3
+#define CODIGO_HABILIDADE 5
 
 void exibirTabuleiro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]){
-    for(int i = 0; i < 10; i++){
-        for(int j = 0; j < 10; j++){
+    for(int i = 0; i < TAMANHO_TABULEIRO; i++){
+        for(int j = 0; j < TAMANHO_TABULEIRO; j++){
             // percorre a matriz e exibe o valor de cada posição
             printf("%d ", tabuleiro[j][i]);
         }
@@ -87,9 +88,49 @@ bool verificarPosicaoValidaNavioDiagonal(int tabuleiro[TAMANHO_TABULEIRO][TAMANH
     return true;
 }
 
+void ativarHabilidade(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int habilidade[5][3], int posX, int posY){
+    // posX e posY sao as posicoes referentes ao centro da habilidade
+    int posXFinal = posX - 2; // posicao inicial com base no centro da habilidade eixo x
+    int posYFinal = posY - 1; // posicao inicial com base no centro da habilidade eixo y
+
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 5; j++){
+            if (habilidade[j][i] == 1 && posicaoExiste(posXFinal + j, posYFinal + i)) // verifica se a posicao existe e se a habilidade e 1
+            {
+                tabuleiro[posXFinal + j][posYFinal + i] = CODIGO_HABILIDADE;
+            }
+        }
+    }
+}
+
 int main() {
 
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0}; // inicializa o tabuleiro com 0
+
+    // habilidades
+    int habCone[5][3] = {
+        {0, 0, 1},
+        {0, 1, 1},
+        {1, 1, 1},
+        {0, 1, 1},
+        {0, 0, 1}
+    };
+
+    int habOctaedro[5][3] = {
+        {0, 0, 0},
+        {0, 1, 0},
+        {1, 1, 1},
+        {0, 1, 0},
+        {0, 0, 0}
+    };
+
+    int habCruz[5][3] = {
+        {0, 1, 0},
+        {0, 1, 0},
+        {1, 1, 1},
+        {0, 1, 0},
+        {0, 1, 0}
+    };
 
     // navio horizontal
     bool posicaoValidaNavio1 = verificarPosicaoValidaNavio(tabuleiro, 0, 0, 0); // verficar se a posicao e valida e salva o resultado na variavel
@@ -107,7 +148,17 @@ int main() {
     bool posicaoValidaNavio4 = verificarPosicaoValidaNavioDiagonal(tabuleiro, 3, 8, 1); // verficar se a posicao e valida e salva o resultado na variavel
     posicaoValidaNavio4 ? adicionarNavioDiagonal(tabuleiro, 3, 8, 1) : printf("Posicao invalida\n"); // se a posicao for valida adiciona o navio no tabuleiro
 
-    exibirTabuleiro(tabuleiro); // exibe o tabuleiro
+    exibirTabuleiro(tabuleiro); // exibe o tabuleiro com navios
+
+    printf("\n\n");
+
+    ativarHabilidade(tabuleiro, habOctaedro, 5, 5); // ativa a habilidade octaedro no tabuleiro
+
+    ativarHabilidade(tabuleiro, habCone, 2, 2); // ativa a habilidade cone no tabuleiro
+
+    ativarHabilidade(tabuleiro, habCruz, 8, 8); // ativa a habilidade cruz no tabuleiro
+
+    exibirTabuleiro(tabuleiro); // exibe o tabuleiro depois das habilidades serem usadas
 
     return 0;
 }
